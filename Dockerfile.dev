@@ -3,9 +3,14 @@ FROM node:20
 
 # Install FFmpeg
 RUN apt-get update && \
-    apt-get install -y ffmpeg && \
+    apt-get install -y ffmpeg fonts-noto-cjk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Optionally set Noto Sans as default font for fontconfig (if needed for your app)
+RUN apt-get update && apt-get install -y fontconfig && \
+    echo "<?xml version='1.0'?><!DOCTYPE fontconfig SYSTEM 'fonts.dtd'><fontconfig><alias><family>sans-serif</family><prefer><family>Noto Sans</family></prefer></alias></fontconfig>" > /etc/fonts/local.conf
+
 
 # Set working directory
 WORKDIR /app

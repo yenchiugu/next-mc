@@ -4,9 +4,9 @@ import path from 'path';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { filename: string } }
+    { params} : { params: Promise<{ filename: string }> }
 ) {
-    const filename = params.filename;
+    const { filename } = await params;
     const videoPath = path.join(process.cwd(), 'generated', filename);
 
     try {
@@ -24,7 +24,7 @@ export async function GET(
             const head = {
                 'Content-Range': `bytes ${start}-${end}/${fileSize}`,
                 'Accept-Ranges': 'bytes',
-                'Content-Length': chunksize,
+                'Content-Length': chunksize.toString(),
                 'Content-Type': 'video/mp4',
                 'Content-Disposition': `attachment; filename="${filename}"`,
             };
@@ -35,7 +35,7 @@ export async function GET(
             });
         } else {
             const head = {
-                'Content-Length': fileSize,
+                'Content-Length': fileSize.toString(),
                 'Content-Type': 'video/mp4',
                 'Content-Disposition': `attachment; filename="${filename}"`,
             };

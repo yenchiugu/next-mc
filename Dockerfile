@@ -1,11 +1,15 @@
 # Use Node.js LTS (Long Term Support) version
 FROM node:20-slim
 
-# Install FFmpeg
+# Install FFmpeg and Google Noto fonts
 RUN apt-get update && \
-    apt-get install -y ffmpeg && \
+    apt-get install -y ffmpeg fonts-noto-cjk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Optionally set Noto Sans as default font for fontconfig (if needed for your app)
+RUN apt-get update && apt-get install -y fontconfig && \
+    echo "<?xml version='1.0'?><!DOCTYPE fontconfig SYSTEM 'fonts.dtd'><fontconfig><alias><family>sans-serif</family><prefer><family>Noto Sans</family></prefer></alias></fontconfig>" > /etc/fonts/local.conf
 
 # Set working directory
 WORKDIR /app
@@ -26,4 +30,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "start"] 
+CMD ["npm", "start"]
