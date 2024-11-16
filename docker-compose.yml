@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: nextjs-dev
+    ports:
+      - "3000:3000"  # Next.js
+      - "9229:9229"  # Debug port
+    volumes:
+      - .:/app  # Mount current directory to container
+      - /app/node_modules  # Prevent overwriting node_modules
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true  # Enable file watching in Docker
+    stdin_open: true  # Keep container running
+    tty: true 
