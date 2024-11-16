@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
             '-i', mainVideoPath,
             '-i', audioPath,
             '-filter_complex',
-            `[0:v]drawtext=text='${name}':fontfile='/Users/username/fonts/SimHei.ttf':fontsize=120:fontcolor=white:x=(w-text_w)/2:y=(h-text_h)/4-40:borderw=1:bordercolor=black:enable='between(t,0,3)',drawtext=text='${desc}':fontfile='/Users/username/fonts/SimHei.ttf':fontsize=48:fontcolor=white:x=(w-text_w)/2:y=(h-text_h)/2-60:borderw=1:bordercolor=black:enable='between(t,8,12)'[vout];[0:a] volume=1.0 [orig_aud];[1:a] adelay=3000|3000, volume=4.0 [bgm_aud];[orig_aud][bgm_aud] amix=inputs=2:duration=longest [mixed];[mixed] alimiter=limit=0.95 [aout]`,
+            `[0:v]drawtext=text='${name}':fontfile='/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc':fontsize=120:fontcolor=white:x=(w-text_w)/2:y=(h-text_h)/4-40:borderw=1:bordercolor=black:enable='between(t,0,3)',drawtext=text='${desc}':fontfile='/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc':fontsize=48:fontcolor=white:x=(w-text_w)/2:y=(h-text_h)/2-60:borderw=1:bordercolor=black:enable='between(t,8,12)'[vout];[0:a] volume=1.0 [orig_aud];[1:a] adelay=3000|3000, volume=4.0 [bgm_aud];[orig_aud][bgm_aud] amix=inputs=2:duration=longest [mixed];[mixed] alimiter=limit=0.95 [aout]`,
             '-map', '[vout]',
             '-map', '[aout]',
             '-c:v', 'libx264',
@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
             '-shortest',
             outputPath
         ];
+        console.log(ffmpegCommand);
 
         // Execute FFmpeg
         await new Promise((resolve, reject) => {
