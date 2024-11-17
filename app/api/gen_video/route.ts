@@ -79,10 +79,8 @@ export async function POST(request: NextRequest) {
         if (!fs.existsSync(permanentDir)) {
             await fs.promises.mkdir(permanentDir);
         }
-        await fs.promises.rename(
-            outputPath,
-            path.join(permanentDir, outputFileName)
-        );
+
+        await moveFile(outputPath, path.join(permanentDir, outputFileName));        
 
         // Clean up temp directory
         await fs.promises.rm(tempDir, { recursive: true });
@@ -97,3 +95,16 @@ export async function POST(request: NextRequest) {
         );
     }
 } 
+
+
+async function moveFile(src: string, dest: string) {
+  try {
+    await fs.promises.copyFile(src, dest); // 複製檔案到目標位置
+    await fs.promises.unlink(src); // 刪除原始檔案
+    console.log('File moved successfully!');
+  } catch (err) {
+    console.error('Error moving file:', err);
+  }
+}
+
+
